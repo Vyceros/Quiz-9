@@ -1,6 +1,6 @@
-package com.example.challenge.presentation.state.connection
+package com.example.challenge.presentation.screen.connection
 
-import com.example.challenge.presentation.model.connection.Connection
+import com.example.challenge.presentation.model.Connection
 
 data class ConnectionState(
     val isLoading: Boolean = false,

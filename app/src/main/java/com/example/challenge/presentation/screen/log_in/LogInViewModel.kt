@@ -2,13 +2,11 @@ package com.example.challenge.presentation.screen.log_in
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.challenge.data.common.Resource
+import com.example.challenge.domain.common.Resource
 import com.example.challenge.domain.usecase.datastore.SaveTokenUseCase
 import com.example.challenge.domain.usecase.log_in.LogInUseCase
 import com.example.challenge.domain.usecase.validator.EmailValidatorUseCase
 import com.example.challenge.domain.usecase.validator.PasswordValidatorUseCase
-import com.example.challenge.presentation.event.log_in.LogInEvent
-import com.example.challenge.presentation.state.log_in.LogInState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

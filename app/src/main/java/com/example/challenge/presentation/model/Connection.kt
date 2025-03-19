@@ -1,4 +1,4 @@
-package com.example.challenge.presentation.model.connection
+package com.example.challenge.presentation.model
 
 
 data class Connection(

@@ -1,7 +1,7 @@
 package com.example.challenge.di
 
 import com.example.challenge.BuildConfig
-import com.example.challenge.data.common.HandleResponse
+import com.example.challenge.domain.common.HandleResponse
 import com.example.challenge.data.service.connection.ConnectionsService
 import com.example.challenge.data.service.log_in.LogInService
 import com.squareup.moshi.Moshi

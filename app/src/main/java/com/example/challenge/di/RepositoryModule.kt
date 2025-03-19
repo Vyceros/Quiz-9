@@ -2,7 +2,7 @@ package com.example.challenge.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.example.challenge.data.common.HandleResponse
+import com.example.challenge.domain.common.HandleResponse
 import com.example.challenge.data.repository.connection.ConnectionsRepositoryImpl
 import com.example.challenge.data.repository.datastore.DataStoreRepositoryImpl
 import com.example.challenge.data.repository.log_in.LogInRepositoryImpl

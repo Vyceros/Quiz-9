@@ -1,4 +1,4 @@
-package com.example.challenge.presentation.screen.connection
+package com.example.challenge.presentation.screen.connection.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.challenge.R
 import com.example.challenge.databinding.ItemConnectionLayoutBinding
 import com.example.challenge.presentation.extension.loadImage
-import com.example.challenge.presentation.model.connection.Connection
+import com.example.challenge.presentation.model.Connection
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

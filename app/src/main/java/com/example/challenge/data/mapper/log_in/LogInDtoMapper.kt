@@ -5,7 +5,7 @@ import com.example.challenge.domain.model.log_in.GetToken
 
 fun LogInDto.toDomain() =
     GetToken(
-        needsMfa = needsMfa ?: false,
+        needsMfa = needsMfa,
         accessToken = accessToken ?: "",
         refreshToken = refreshToken ?: ""
     )

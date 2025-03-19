@@ -2,11 +2,9 @@ package com.example.challenge.presentation.screen.connection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.challenge.data.common.Resource
+import com.example.challenge.domain.common.Resource
 import com.example.challenge.domain.usecase.connection.GetConnectionsUseCase
 import com.example.challenge.domain.usecase.datastore.ClearDataStoreUseCase
-import com.example.challenge.presentation.event.conection.ConnectionEvent
-import com.example.challenge.presentation.state.connection.ConnectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
