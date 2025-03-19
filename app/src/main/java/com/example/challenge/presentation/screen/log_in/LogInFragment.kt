@@ -64,11 +64,15 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
         }
     }
 
-    private fun handleNavigationEvents(event: LogInViewModel.LogInUiEvent) {
+    private fun handleNavigationEvents(event: LogInEvent) {
         when (event) {
-            is LogInViewModel.LogInUiEvent.NavigateToConnections -> findNavController().navigate(
+            is LogInEvent.LogIn -> findNavController().navigate(
                 LogInFragmentDirections.actionLogInFragmentToConnectionsFragment()
             )
+
+            is LogInEvent.ResetErrorMessage -> {
+                binding.root.showSnackBar(message = "Error")
+            }
         }
     }
 }

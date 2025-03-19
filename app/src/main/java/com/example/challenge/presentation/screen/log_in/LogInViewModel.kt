@@ -8,10 +8,12 @@ import com.example.challenge.domain.usecase.log_in.LogInUseCase
 import com.example.challenge.domain.usecase.validator.EmailValidatorUseCase
 import com.example.challenge.domain.usecase.validator.PasswordValidatorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,10 +26,10 @@ class LogInViewModel @Inject constructor(
     private val passwordValidator: PasswordValidatorUseCase
 ) : ViewModel() {
     private val _logInState = MutableStateFlow(LogInState())
-    val logInState: SharedFlow<LogInState> = _logInState.asStateFlow()
+    val logInState = _logInState.asStateFlow()
 
-    private val _uiEvent = MutableSharedFlow<LogInUiEvent>()
-    val uiEvent: SharedFlow<LogInUiEvent> get() = _uiEvent
+    private val _uiEvent = Channel<LogInEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     fun onEvent(event: LogInEvent) {
         when (event) {
@@ -49,7 +51,7 @@ class LogInViewModel @Inject constructor(
                     is Resource.Success -> {
                         _logInState.update { currentState -> currentState.copy(accessToken = it.data.accessToken) }
                         saveTokenUseCase(it.data.accessToken)
-                        _uiEvent.emit(LogInUiEvent.NavigateToConnections)
+                        _uiEvent.send(LogInEvent.LogIn(email = email,password = password))
                     }
 
                     is Resource.Error -> updateErrorMessage(message = it.errorMessage)
@@ -76,10 +78,6 @@ class LogInViewModel @Inject constructor(
 
     private fun updateErrorMessage(message: String?) {
         _logInState.update { currentState -> currentState.copy(errorMessage = message) }
-    }
-
-    sealed interface LogInUiEvent {
-        object NavigateToConnections : LogInUiEvent
     }
 }
 

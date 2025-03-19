@@ -1,8 +1,8 @@
 package com.example.challenge.presentation.screen.connection
 
 sealed class ConnectionEvent {
-    object FetchConnections : ConnectionEvent()
-    object LogOut : ConnectionEvent()
-    object ResetErrorMessage : ConnectionEvent()
+    data object FetchConnections : ConnectionEvent()
+    data object LogOut : ConnectionEvent()
+    data object ResetErrorMessage : ConnectionEvent()
 
 }

@@ -5,11 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.challenge.domain.common.Resource
 import com.example.challenge.domain.usecase.connection.GetConnectionsUseCase
 import com.example.challenge.domain.usecase.datastore.ClearDataStoreUseCase
+import com.example.challenge.presentation.mapper.toPresenter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,10 +23,10 @@ class ConnectionsViewModel @Inject constructor(
 ) :
     ViewModel() {
     private val _connectionState = MutableStateFlow(ConnectionState())
-    val connectionState: SharedFlow<ConnectionState> = _connectionState.asStateFlow()
+    val connectionState = _connectionState.asStateFlow()
 
-    private val _uiEvent = MutableSharedFlow<ConnectionUiEvent>()
-    val uiEvent: SharedFlow<ConnectionUiEvent> get() = _uiEvent
+    private val _uiEvent = Channel<ConnectionEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     fun onEvent(event: ConnectionEvent) {
         when (event) {
@@ -46,7 +47,7 @@ class ConnectionsViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        //_connectionState.update { currentState -> currentState.copy(connections = it.data.map { it.toPresenter() }) }
+                        _connectionState.update { currentState -> currentState.copy(connections = it.data.map { it.toPresenter() }) }
                     }
 
                     is Resource.Error -> updateErrorMessage(message = it.errorMessage)
@@ -58,7 +59,7 @@ class ConnectionsViewModel @Inject constructor(
     private fun logOut(){
         viewModelScope.launch {
             clearDataStoreUseCase()
-            _uiEvent.emit(ConnectionUiEvent.NavigateToLogIn)
+            _uiEvent.send(ConnectionEvent.LogOut)
         }
     }
 
@@ -66,7 +67,4 @@ class ConnectionsViewModel @Inject constructor(
         _connectionState.update { currentState -> currentState.copy(errorMessage = message) }
     }
 
-    sealed interface ConnectionUiEvent {
-        object NavigateToLogIn : ConnectionUiEvent
-    }
 }
