@@ -9,6 +9,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,21 +20,22 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(private val getTokenUseCase: GetTokenUseCase) :
     ViewModel() {
 
-    private val _uiEvent = Channel<SplashUiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+    private val _uiEvent = MutableSharedFlow<SplashUiEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
 
 
     init {
         readSession()
     }
 
+
     private fun readSession() {
         viewModelScope.launch {
             getTokenUseCase().collect {
                 if (it.isEmpty())
-                    _uiEvent.send(SplashUiEvent.NavigateToLogin)
+                    _uiEvent.emit(SplashUiEvent.NavigateToLogin)
                 else
-                    _uiEvent.send(SplashUiEvent.NavigateToConnections)
+                    _uiEvent.emit(SplashUiEvent.NavigateToConnections)
             }
         }
     }

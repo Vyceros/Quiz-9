@@ -1,6 +1,6 @@
 package com.example.challenge.presentation.screen.log_in
 
-import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -55,23 +55,17 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
     }
 
     private fun handleLogInState(logInState: LogInState) {
-        binding.loaderInclude.loaderContainer.visibility =
-            if (logInState.isLoading) View.VISIBLE else View.GONE
-
-        logInState.errorMessage?.let {
-            binding.root.showSnackBar(message = it)
-            viewModel.onEvent(LogInEvent.ResetErrorMessage)
-        }
+        binding.loaderInclude.loaderContainer.isVisible = logInState.isLoading
     }
 
-    private fun handleNavigationEvents(event: LogInEvent) {
+    private fun handleNavigationEvents(event: LoginUiEvent) {
         when (event) {
-            is LogInEvent.LogIn -> findNavController().navigate(
+            is LoginUiEvent.NavigateToConnections -> findNavController().navigate(
                 LogInFragmentDirections.actionLogInFragmentToConnectionsFragment()
             )
 
-            is LogInEvent.ResetErrorMessage -> {
-                binding.root.showSnackBar(message = "Error")
+            is LoginUiEvent.ShowError -> {
+                binding.root.showSnackBar(message = event.message)
             }
         }
     }

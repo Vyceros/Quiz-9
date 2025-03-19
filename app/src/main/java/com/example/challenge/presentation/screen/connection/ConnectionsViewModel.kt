@@ -7,10 +7,9 @@ import com.example.challenge.domain.usecase.connection.GetConnectionsUseCase
 import com.example.challenge.domain.usecase.datastore.ClearDataStoreUseCase
 import com.example.challenge.presentation.mapper.toPresenter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,9 +24,6 @@ class ConnectionsViewModel @Inject constructor(
     private val _connectionState = MutableStateFlow(ConnectionState())
     val connectionState = _connectionState.asStateFlow()
 
-    private val _uiEvent = Channel<ConnectionEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
-
     fun onEvent(event: ConnectionEvent) {
         when (event) {
             is ConnectionEvent.FetchConnections -> fetchConnections()
@@ -37,7 +33,7 @@ class ConnectionsViewModel @Inject constructor(
     }
 
     private fun fetchConnections() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getConnectionsUseCase().collect {
                 when (it) {
                     is Resource.Loading -> _connectionState.update { currentState ->
@@ -57,9 +53,8 @@ class ConnectionsViewModel @Inject constructor(
     }
 
     private fun logOut(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             clearDataStoreUseCase()
-            _uiEvent.send(ConnectionEvent.LogOut)
         }
     }
 

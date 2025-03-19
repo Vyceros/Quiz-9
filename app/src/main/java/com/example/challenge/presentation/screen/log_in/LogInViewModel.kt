@@ -8,6 +8,7 @@ import com.example.challenge.domain.usecase.log_in.LogInUseCase
 import com.example.challenge.domain.usecase.validator.EmailValidatorUseCase
 import com.example.challenge.domain.usecase.validator.PasswordValidatorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,18 +29,17 @@ class LogInViewModel @Inject constructor(
     private val _logInState = MutableStateFlow(LogInState())
     val logInState = _logInState.asStateFlow()
 
-    private val _uiEvent = Channel<LogInEvent>()
+    private val _uiEvent = Channel<LoginUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
     fun onEvent(event: LogInEvent) {
         when (event) {
             is LogInEvent.LogIn -> validateForm(email = event.email, password = event.password)
-            is LogInEvent.ResetErrorMessage -> updateErrorMessage(message = null)
         }
     }
 
     private fun logIn(email: String, password: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             logInUseCase(email = email, password = password).collect {
                 when (it) {
                     is Resource.Loading -> _logInState.update { currentState ->
@@ -56,7 +56,7 @@ class LogInViewModel @Inject constructor(
                             )
                         }
                         saveTokenUseCase(it.data.accessToken)
-                        _uiEvent.send(LogInEvent.LogIn(email = email, password = password))
+                        _uiEvent.send(LoginUiEvent.NavigateToConnections)
                     }
 
                     is Resource.Error -> updateErrorMessage(message = it.errorMessage)
@@ -87,6 +87,11 @@ class LogInViewModel @Inject constructor(
                 errorMessage = message,
                 isLoading = false
             )
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            message?.let{
+                _uiEvent.send(LoginUiEvent.ShowError(message))
+            }
         }
     }
 }
