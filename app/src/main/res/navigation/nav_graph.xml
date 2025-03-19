@@ -9,7 +9,12 @@
         android:id="@+id/connectionsFragment"
         android:name="com.example.challenge.presentation.screen.connection.ConnectionsFragment"
         android:label="fragment_connections"
-        tools:layout="@layout/fragment_connections" />
+        tools:layout="@layout/fragment_connections" >
+        <action
+            android:id="@+id/action_connectionsFragment_to_logInFragment"
+            app:popUpTo="@id/nav_graph"
+            app:destination="@id/logInFragment" />
+    </fragment>
     <fragment
         android:id="@+id/logInFragment"
         android:name="com.example.challenge.presentation.screen.log_in.LogInFragment"
@@ -17,6 +22,7 @@
         tools:layout="@layout/fragment_log_in" >
         <action
             android:id="@+id/action_logInFragment_to_connectionsFragment"
+            app:popUpTo="@id/nav_graph"
             app:destination="@id/connectionsFragment" />
     </fragment>
     <fragment
@@ -26,9 +32,11 @@
         tools:layout="@layout/fragment_splash" >
         <action
             android:id="@+id/action_splashFragment_to_logInFragment"
+            app:popUpTo="@id/nav_graph"
             app:destination="@id/logInFragment" />
         <action
             android:id="@+id/action_splashFragment_to_connectionsFragment"
+            app:popUpTo="@id/nav_graph"
             app:destination="@id/connectionsFragment" />
     </fragment>
 </navigation>

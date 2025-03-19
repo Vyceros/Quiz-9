@@ -1,6 +1,7 @@
 package com.example.challenge.presentation.screen.connection
 
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -35,7 +36,7 @@ class ConnectionsFragment :
     override fun bindViewActionListeners() {
         binding.btnLogOut.setOnClickListener {
             viewModel.onEvent(ConnectionEvent.LogOut)
-            findNavController().popBackStack()
+            findNavController().navigate(ConnectionsFragmentDirections.actionConnectionsFragmentToLogInFragment())
         }
     }
 
@@ -47,18 +48,10 @@ class ConnectionsFragment :
                 }
             }
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiEvent.collect {
-                }
-            }
-        }
     }
 
     private fun handleConnectionState(state: ConnectionState) {
-        binding.loaderInclude.loaderContainer.visibility =
-            if (state.isLoading) View.VISIBLE else View.GONE
+        binding.loaderInclude.loaderContainer.isVisible = state.isLoading
 
         state.connections.let {
             connectionsRecyclerAdapter.submitList(it)

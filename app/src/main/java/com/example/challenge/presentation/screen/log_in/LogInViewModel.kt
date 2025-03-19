@@ -49,9 +49,14 @@ class LogInViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        _logInState.update { currentState -> currentState.copy(accessToken = it.data.accessToken, isLoading = false) }
+                        _logInState.update { currentState ->
+                            currentState.copy(
+                                accessToken = it.data.accessToken,
+                                isLoading = false
+                            )
+                        }
                         saveTokenUseCase(it.data.accessToken)
-                        _uiEvent.send(LogInEvent.LogIn(email = email,password = password))
+                        _uiEvent.send(LogInEvent.LogIn(email = email, password = password))
                     }
 
                     is Resource.Error -> updateErrorMessage(message = it.errorMessage)
@@ -77,7 +82,12 @@ class LogInViewModel @Inject constructor(
     }
 
     private fun updateErrorMessage(message: String?) {
-        _logInState.update { currentState -> currentState.copy(errorMessage = message, isLoading = false) }
+        _logInState.update { currentState ->
+            currentState.copy(
+                errorMessage = message,
+                isLoading = false
+            )
+        }
     }
 }
 
