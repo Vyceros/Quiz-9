@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challenge.databinding.FragmentConnectionsBinding
@@ -50,7 +51,6 @@ class ConnectionsFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiEvent.collect {
-                    handleNavigationEvents(event = it)
                 }
             }
         }
@@ -70,9 +70,5 @@ class ConnectionsFragment :
         }
     }
 
-    private fun handleNavigationEvents(event: ConnectionsViewModel.ConnectionUiEvent) {
-        findNavController().navigate(ConnectionsFragmentDirections.actionFriendsFragmentToLogInFragment())
-    }
 }
 
-class String

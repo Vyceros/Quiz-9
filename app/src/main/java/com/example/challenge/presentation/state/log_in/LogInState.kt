@@ -1,6 +1,5 @@
 package com.example.challenge.presentation.state.log_in
 
-import android.moshi.String
 
 data class LogInState(
     val isLoading: Boolean = false,

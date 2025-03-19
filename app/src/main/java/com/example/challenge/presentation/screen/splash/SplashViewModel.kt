@@ -15,21 +15,21 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(private val getTokenUseCase: GetTokenUseCase) :
     ViewModel() {
 
-    private val _uiEvent = MutableSharedFlow<SplashUiEvent>()
-    val uiEvent: SharedFlow<SplashUiEvent> get() = _uiEvent
-
-    init {
-        readSession()
-    }
-
-    private fun readSession() {
-        viewModelScope.launch {
-            getTokenUseCase().collect {
-                if (it.isEmpty())
-                    _uiEvent.emit(SplashUiEvent.NavigateToLogIn)
-                else
-                    _uiEvent.emit(SplashUiEvent.NavigateToConnections)
-            }
-        }
-    }
+//    private val _uiEvent = MutableSharedFlow<SplashUiEvent>()
+//    val uiEvent: SharedFlow<SplashUiEvent> get() = _uiEvent
+//
+//    init {
+//        readSession()
+//    }
+//
+//    private fun readSession() {
+//        viewModelScope.launch {
+//            getTokenUseCase().collect {
+//                if (it.isEmpty())
+//                    _uiEvent.emit(SplashUiEvent.NavigateToLogIn)
+//                else
+//                    _uiEvent.emit(SplashUiEvent.NavigateToConnections)
+//            }
+//        }
+//    }
 }

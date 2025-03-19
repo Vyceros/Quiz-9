@@ -69,7 +69,7 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
     private fun handleNavigationEvents(event: LogInViewModel.LogInUiEvent) {
         when (event) {
             is LogInViewModel.LogInUiEvent.NavigateToConnections -> findNavController().navigate(
-                LogInFragmentDirections.actionLogInFragmentToFriendsFragment()
+                LogInFragmentDirections.actionLogInFragmentToConnectionsFragment()
             )
         }
     }
