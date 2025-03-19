@@ -47,7 +47,7 @@ class ConnectionsViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        _connectionState.update { currentState -> currentState.copy(connections = it.data.map { it.toPresenter() }) }
+                        _connectionState.update { currentState -> currentState.copy(connections = it.data.map { it.toPresenter() }, isLoading = false) }
                     }
 
                     is Resource.Error -> updateErrorMessage(message = it.errorMessage)
@@ -64,7 +64,7 @@ class ConnectionsViewModel @Inject constructor(
     }
 
     private fun updateErrorMessage(message: String?) {
-        _connectionState.update { currentState -> currentState.copy(errorMessage = message) }
+        _connectionState.update { currentState -> currentState.copy(errorMessage = message, isLoading = false) }
     }
 
 }

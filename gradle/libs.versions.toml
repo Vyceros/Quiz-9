@@ -1,6 +1,5 @@
 [versions]
 agp = "8.6.1"
-converterMoshi = "retrofit"
 datastorePreferences = "1.1.2"
 hiltAndroid = "2.51.1"
 hiltAndroidCompiler = "2.51.1"

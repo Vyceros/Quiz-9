@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challenge.databinding.FragmentConnectionsBinding
 import com.example.challenge.data.mapper.base.BaseFragment
@@ -18,10 +19,11 @@ class ConnectionsFragment :
     BaseFragment<FragmentConnectionsBinding>(FragmentConnectionsBinding::inflate) {
 
     private val viewModel: ConnectionsViewModel by viewModels()
-    private lateinit var connectionsRecyclerAdapter: ConnectionsRecyclerAdapter
+    private val connectionsRecyclerAdapter by lazy {
+        ConnectionsRecyclerAdapter()
+    }
 
     override fun bind() {
-        connectionsRecyclerAdapter = ConnectionsRecyclerAdapter()
         binding.apply {
             recyclerConnections.layoutManager = LinearLayoutManager(requireContext())
             recyclerConnections.setHasFixedSize(true)
@@ -33,6 +35,7 @@ class ConnectionsFragment :
     override fun bindViewActionListeners() {
         binding.btnLogOut.setOnClickListener {
             viewModel.onEvent(ConnectionEvent.LogOut)
+            findNavController().popBackStack()
         }
     }
 
@@ -57,7 +60,7 @@ class ConnectionsFragment :
         binding.loaderInclude.loaderContainer.visibility =
             if (state.isLoading) View.VISIBLE else View.GONE
 
-        state.connections?.let {
+        state.connections.let {
             connectionsRecyclerAdapter.submitList(it)
         }
 
